@@ -12,30 +12,35 @@ def add_to_csv(row):
     f.close()
 
 
-def is_in_csv(user):
-    with open(path, 'r') as f:
+def is_in_userlist(user):
+    with open(path, 'r') as file:
         columns = header
-        reader = csv.DictReader(f, columns)
+        reader = csv.DictReader(file, columns)
         filtered_output = [line for line in reader if line['username'] == user]
-        if filtered_output:
-                return True
+        return filtered_output or (user == 'admin')
 
+def check_password(user,password):
+    with open(path, 'r') as file:
+        columns = header
+        reader = csv.DictReader(file, columns)
+        filtered_output = [line for line in reader if line['username'] == user and line['password']==password]
+        return filtered_output
 
 def get_all_users():
     with open(path, 'r', newline='') as f:
         reader = csv.reader(f)
         next(reader, None)
-        return [[line[0],":",line[1]] for line in reader]
+        return [[line[0], ":", line[1]] for line in reader]
 
 
 def add_account(user, password):
-        with open(path, 'a', newline='') as f:
-            writer = csv.writer(f)
-            account=[]
-            account.append(user)
-            account.append(password)
-            writer.writerow(account)
-        f.close()
+    with open(path, 'a', newline='') as f:
+        writer = csv.writer(f)
+        account = []
+        account.append(user)
+        account.append(password)
+        writer.writerow(account)
+    f.close()
 
 
 def delete_account(user):

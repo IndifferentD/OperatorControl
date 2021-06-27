@@ -4,8 +4,8 @@
 block_cipher = None
 
 
-a = Analysis(['Main.py'],
-             pathex=['F:\\Work\\OperatorC'],
+a = Analysis(['F:/Work/OperatorControl/Main.py'],
+             pathex=['F:\\Work\\OperatorControl'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -31,4 +31,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=True )

@@ -1,11 +1,10 @@
-
 from threading import Timer
 from datetime import datetime, time
 
 import time as t
-import logg
+
 import schedule
-import snd_mail
+import report
 import GUI
 
 from threading import Thread
@@ -16,38 +15,30 @@ from threading import Thread
 # from pympler.tracker import SummaryTracker
 #
 # tracker = SummaryTracker()
+import cfg
+
 
 # gc.enable()
 # gc.set_debug(1)
 
-## Настройки
-Control_time_start_set = '09:00'  # Начало тестируемого интервала в день начала смены
-Control_time_start = datetime.strptime(Control_time_start_set, '%H:%M').time()
-Control_time_end_set = '07:00'  # Конец тестируемого интервала на следующий день
-Control_time_end = datetime.strptime(Control_time_end_set, '%H:%M').time()
-
-
-snd_rpt_hour = 8  # час отправки отчета
-snd_rpt_minute = 0  # минуты отправки отчета
-snd_rpt_time = time(snd_rpt_hour, snd_rpt_minute)
-
-def send_report():
-    snd_mail.send_mail('test', ['mozgunov.gs@gmail.com'], 'test', 'test', files=[logg.LOG_FILE],
-                       server="smtp.yandex.ru", port=465, username='IndifferentD@yandex.ru', password='',
-                       use_tls=True)
-
-
+# TODO: Протестировать скелдью
 def start_control():
-    logg.configure_day_log()
-    GUI.generate_timer.cancel()
+    if GUI.current_user != ('admin' or None):
+        GUI.generate_timer = GUI.RepeatableTimer(GUI.generate_appear_interval(), GUI.generate_win_pos_and_timer, ())
+        GUI.generate_timer.start()
 
 
 def end_control():
-    GUI.generate_timer.cancel()
+    # TODO: если проверочное окно открыто - закрыть (с записью?)
+    print('Контроль прекращен')
+    GUI.stop_timers()
 
 
-schedule.every().day.at(Control_time_start_set).do(start_control)
-schedule.every().day.at(Control_time_end_set).do(end_control)
+def init_jobs():
+    schedule.clear()
+    schedule.every().day.at(cfg.config.read()['TimeSettings']['shiftstart']).do(start_control)
+    schedule.every().day.at(cfg.config.read()['TimeSettings']['ReportSendTime']).do(report.send_report)
+    schedule.every().day.at(cfg.config.read()['TimeSettings']['shiftend']).do(end_control)
 
 
 def scheldue_job_pender():
@@ -56,11 +47,8 @@ def scheldue_job_pender():
         t.sleep(1)
 
 
-ScldReportThread = Thread(target=scheldue_job_pender,)
+init_jobs()
+
+ScldReportThread = Thread(target=scheldue_job_pender, )
+ScldReportThread.daemon=True
 ScldReportThread.start()
-
-
-# generate_window_pos()
-
-# root.withdraw()
-# root.mainloop()

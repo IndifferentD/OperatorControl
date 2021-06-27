@@ -49,7 +49,24 @@ from pynput import keyboard
 # listener.start()
 
 
-account = []
-account.append('user')
-account.append('password')
-print((account))
+# account = []
+# account.append('user')
+# account.append('password')
+# print((account))
+
+# import os
+# import logg
+# import time
+# import datetime as dt
+#
+#
+# def filetest():
+#     outf = logg.month_log_folder + "/" + (dt.datetime.fromtimestamp(time.time())-dt.timedelta(days=1)).strftime('%Y_%m') + ".log"
+#     with open(outf, "wb") as outfile:
+#         for f in os.listdir(logg.month_log_folder):
+#             filename = logg.month_log_folder + "/" + f
+#             with open(filename, "rb") as infile:
+#                 outfile.write(infile.read())
+#
+#
+# filetest()
