@@ -18,19 +18,19 @@ def generate_code(symbols, length):
     return ''.join(choice(symbols) for _ in range(int(length)))
 
 
-# Exception catcher
-import traceback
-import tkinter.messagebox
-
-
-# You would normally put that on the App class
-def show_error(self, *args):
-    err = traceback.format_exception(*args)
-    tkinter.messagebox.showerror('Exception', err)
-
-
-# but this works too
-tk.Tk.report_callback_exception = show_error
+# # Exception catcher
+# import traceback
+# import tkinter.messagebox
+#
+#
+# # You would normally put that on the App class
+# def show_error(self, *args):
+#     err = traceback.format_exception(*args)
+#     tkinter.messagebox.showerror('Exception', err)
+#
+#
+# # but this works too
+# tk.Tk.report_callback_exception = show_error
 
 
 # #
@@ -76,15 +76,19 @@ class CheckWindow:
         time_to_ack = datetime.now() - self.window_appeared_at
         window_appeared_at_time = self.window_appeared_at.strftime('%H:%M')
         minutes, seconds = divmod(int(time_to_ack.total_seconds()), 60)
+        if time_to_ack > timedelta(seconds=int(Config.read()['TimeSettings']['NeedReactionTime'])):
+            warn = '!!!'
+        else:
+            warn = ''
         if state == 'ok':
             btntext = self.btn_ack['text']
         else:
             btntext = self.btn_late['text']
-        logg.logging.info('* %s * %s * %s * %s * %s * %s мин %s сек *', current_user,
+        logg.logging.info('* %s * %s * %s * %s * %s * %s мин %s сек * %s', current_user,
                           self.label_code.cget("text"),
                           window_appeared_at_time, datetime.now().strftime('%H:%M'),
                           btntext,
-                          minutes, seconds)
+                          minutes, seconds, warn)
         self.master.withdraw()
         start_reveal_timer()
 

@@ -70,3 +70,26 @@ from pynput import keyboard
 #
 #
 # filetest()
+
+import cfg
+import report
+import logg
+import datetime as dt
+
+report.send_mail(
+                send_from='IndifferentD@yandex.ru',
+                 # send_to=cfg.config.read()['AdminSettings']['Emails'],
+                send_to=['IndifferentD@yandex.ru'],
+                 subject='Контроль оператора',
+                 message='',
+                 files=[logg.LOG_FILE],
+                 # files=[],
+                 # server=cfg.config.read()['AdminSettings']['SmtpServer'],
+                    server='smtp.yandex.ru',
+                 # port=cfg.config.read()['AdminSettings']['EmailPort'],
+                 port='587',
+                 # username=cfg.config.read()['AdminSettings']['Email'],
+                 username='IndifferentD@yandex.ru',
+                 # password=cfg.config.read()['AdminSettings']['EmailPassword'],
+                 password='1qazZAQ!qwe',
+                 use_tls=True)

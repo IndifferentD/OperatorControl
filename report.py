@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
+from email.header    import Header
 from email import encoders
 import datetime as dt
 import time
@@ -33,7 +34,9 @@ def send_mail(send_from, send_to, subject, message, files=[],
     msg['From'] = send_from
     msg['To'] = COMMASPACE.join(send_to)
     msg['Date'] = formatdate(localtime=True)
-    msg['Subject'] = subject
+    # msg['Subject'] = subject
+    msg['Subject'] = Header(subject, 'utf-8')
+    # msg.add_header('Subject', subject)
 
     msg.attach(MIMEText(message))
 
@@ -47,20 +50,20 @@ def send_mail(send_from, send_to, subject, message, files=[],
         msg.attach(part)
 
     smtp = smtplib.SMTP(server, port)
-    try:
-        if use_tls:
-            smtp.starttls()
-        smtp.login(username, password)
-        smtp.sendmail(send_from, send_to, msg.as_string())
-        smtp.quit()
-    except smtp.SMTPResponseException as e:
-        error_code = e.smtp_code
-        error_message = e.smtp_error
-        print(error_code, error_message)
+    # try:
+    if use_tls:
+        smtp.starttls()
+    smtp.login(username, password)
+    smtp.sendmail(send_from, send_to, msg.as_string())
+    smtp.quit()
+    # except smtp.SMTPResponseException as e:
+    #     error_code = e.smtp_code
+    #     error_message = e.smtp_error
+    #     print(error_code, error_message)
 
 
 def send_day_report():
-    send_mail(send_from='Контроль оператора',
+    send_mail(send_from=cfg.config.read()['AdminSettings']['Email'],
               send_to=cfg.config.read()['AdminSettings']['Emails'],
               subject=f'Контроль оператора: Отчет за {dt.date.today() - dt.timedelta(days=1)}',
               message='',
@@ -74,7 +77,7 @@ def send_day_report():
 
 def send_month_report():
     create_month_report()
-    send_mail(send_from='Контроль оператора',
+    send_mail(send_from=cfg.config.read()['AdminSettings']['Email'],
               send_to=cfg.config.read()['AdminSettings']['Emails'],
               # TODO: исправить на месяц
               subject=f'Контроль оператора: Отчет за {dt.date.today() - dt.timedelta(days=1)}',
