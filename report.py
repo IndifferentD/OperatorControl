@@ -104,7 +104,6 @@ def create_month_report():
 
 def send_report():
     send_day_report()
-    if dt.today().day == 1:
+    if dt.date.today().day == 1:
         send_month_report()
     logg.configure_day_log()
-

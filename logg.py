@@ -52,6 +52,7 @@ def configure_day_log():
     fileHandler.setFormatter(logFormatter)
     rootLogger.addHandler(fileHandler)  # set the new handler
 
+#TODO: если запущена после 12 ночи но до начала смены - лог файл вчерашнего дня
 configure_day_log()
 
 logging.info(dt.datetime.now().strftime('%H:%M:%S')+" Программа запущена")
