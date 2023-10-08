@@ -1,12 +1,19 @@
 ﻿# OperatorControl
+--------------------------------------------------------------
 Программа для контроля присутствия на рабочем месте оператора видеонаблюдения.
-Принцип действия: 
+
 
 Для компляции в исполняемый файл использовать PyInstaller
+
 Interpreter options: -m PyInstaller
+
 Script: Main.py
+
 Parameters: -D -F --noconsole -n OperatorChecker -i "NONE"
 
+--------------------------------------------------------------
+
+Принцип действия: 
 После запуска OperatorChecker на экране появится окно логина
 
 ![image](https://github.com/IndifferentD/OperatorControl/assets/51487497/16835154-35e7-4115-9046-5d210aae1620)
